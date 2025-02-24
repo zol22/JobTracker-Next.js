@@ -6,8 +6,8 @@ import Reminders from '../components/Reminders';
 import { Job } from '../types';
 import Affirmation from '../components/Affirmation';
 import Image from 'next/image';
-import { addComment, deleteJob, getJobs, postJob, updateStatus } from '@/lib/api';
-
+import { addComment, deleteJob, postJob, updateStatus } from '@/lib/api';
+import { jobsList } from '@/controllers/jobs.controller';
 
 type HomeProps = {
   initialJobs: Job[]
@@ -79,12 +79,9 @@ export default Home;
 
 // Difference between getStaticProps and getServerSideProps
 export const getStaticProps: GetStaticProps = async () => {
-  const initialJobs = await getJobs();
-  console.log(`These are initial Jobs from GetStaticProps: ${JSON.stringify(initialJobs)}`)
-
   return {
     props: {
-      initialJobs,
+      initialJobs : jobsList,
     },
   };
 

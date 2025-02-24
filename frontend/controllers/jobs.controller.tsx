@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Job } from "@/types";
-let jobs : Job[] = [
+export const jobsList : Job[] = [
     {
       id: 1,
       title: 'Frontend Developer',
@@ -62,10 +62,10 @@ let jobs : Job[] = [
 
 export const listJobs = async (req: NextApiRequest, res:NextApiResponse) => {
     try {
-        if (!jobs) {
+        if (!jobsList) {
           return res.status(404).json({ message: 'Jobs not Found', error: 'Not Found: The requested resource does not exist.'})
         }
-        res.status(200).json({message:'Jobs are listed successfully', jobs}) // Sends back the newly created job  as a JSON response.
+        res.status(200).json({message:'Jobs are listed successfully', jobsList}) // Sends back the newly created job  as a JSON response.
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' })
       }
@@ -78,7 +78,7 @@ export const postAjob = async (req: NextApiRequest, res:NextApiResponse) => {
           return res.status(400).json({ error: 'Title, company, and description are required.' });
         }
         const newJob = {
-          id: jobs.length + 1,
+          id: jobsList.length + 1,
           title,
           company,
           description,
@@ -86,7 +86,7 @@ export const postAjob = async (req: NextApiRequest, res:NextApiResponse) => {
           comments: [],
           history: [{ status: 'Applied', date: new Date().toISOString() }],
         };
-        jobs.push(newJob);
+        jobsList.push(newJob);
         return res.status(201).json(newJob);
     } catch(error) {
         console.error('Error creating job:', error);
@@ -97,7 +97,7 @@ export const postAjob = async (req: NextApiRequest, res:NextApiResponse) => {
 export const addAComment = async (req: NextApiRequest, res:NextApiResponse) => {
     const { id } = req.query;
     const { comment } = req.body;
-    const job = jobs.find((job) => job.id === parseInt(id as string)); // we need to handle the fact that the id in the URL is a string, not a number. The id coming from the request URL is a string (because everything in the URL is a string).
+    const job = jobsList.find((job) => job.id === parseInt(id as string)); // we need to handle the fact that the id in the URL is a string, not a number. The id coming from the request URL is a string (because everything in the URL is a string).
     if (job) {
         // Initialize comments if it's undefined
         if (!job.comments) {
@@ -114,7 +114,7 @@ export const addAComment = async (req: NextApiRequest, res:NextApiResponse) => {
 export const updateStatus = async (req: NextApiRequest, res:NextApiResponse) => {
     const { id } = req.query;
     const { status } = req.body;
-    const job = jobs.find((job) => job.id === parseInt(id as string)); // converts the id from a string to an integer (a number).
+    const job = jobsList.find((job) => job.id === parseInt(id as string)); // converts the id from a string to an integer (a number).
     if (job) {
       job.status = status;
       job.history.push({ status, date: new Date().toISOString() });
@@ -127,11 +127,11 @@ export const updateStatus = async (req: NextApiRequest, res:NextApiResponse) => 
 export const updateJob = async (req: NextApiRequest, res:NextApiResponse) => {
     const { id } = req.query;
     const updatedJob = req.body;
-    const jobIndex = jobs.findIndex((job) => job.id === parseInt(id as string));
+    const jobIndex = jobsList.findIndex((job) => job.id === parseInt(id as string));
 
     if (jobIndex !== -1) {
-        jobs[jobIndex] = { ...jobs[jobIndex], ...updatedJob };
-        return res.json(jobs[jobIndex]);
+        jobsList[jobIndex] = { ...jobsList[jobIndex], ...updatedJob };
+        return res.json(jobsList[jobIndex]);
     } else {
         return res.status(404).send('Job not found');
     }
@@ -139,7 +139,7 @@ export const updateJob = async (req: NextApiRequest, res:NextApiResponse) => {
 
 export const deleteJob = async (req: NextApiRequest, res:NextApiResponse) => {
     const { id } = req.query;
-    jobs = jobs.filter((job) => job.id !== parseInt(id as string));
+    jobsList.filter((job) => job.id !== parseInt(id as string));
     return res.status(204).send('Job was successfully deleted');
 
 }
