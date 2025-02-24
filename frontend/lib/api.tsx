@@ -19,7 +19,7 @@ export async function postJob(jobData: Partial <Job>) {
 }
 
 export async function deleteJob(id: number) {
-    const res = fetch(`${API_URL}/api/jobs/${id}`, { method: 'DELETE' });
+    fetch(`${API_URL}/api/jobs/${id}`, { method: 'DELETE' });
 }
 
 export async function updateStatus(id: number, status: string){

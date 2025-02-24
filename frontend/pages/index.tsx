@@ -23,7 +23,7 @@ const Home = ({ initialJobs }: HomeProps ) => {
   };
 
   const handleDeleteJob = async (id: number) => {
-    const selectedJob = await deleteJob(id)
+     await deleteJob(id)
     setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
   };
 

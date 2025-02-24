@@ -12,7 +12,7 @@ type JobListProps = {
 const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps) => {
   
   const [selectedJob, setSelectedJob] = useState<Job | null>(null); // Tracks the job being viewed in the modal. It is either a Job object or null when no job is selected.
-  const [comment, setComment] = useState("");
+  //const [comment, setComment] = useState("");
   const [activeTab, setActiveTab] = useState("All"); // Tracks the currently selected tab for filtering jobs
 
   /* 
