@@ -118,10 +118,23 @@ const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps)
       </table>
       </div>
 
+      {/* 
+        React Does Not Rerender Modal on Parent State Change:
+        The modal is using a snapshot of selectedJob (the job at the moment it was clicked).
+        Even though onUpdateStatus updates the parent (index.tsx), selectedJob inside the modal does not reflect this change.
+        React does not automatically update selectedJob unless you close and reopen the modal.  
+        ----------------------------------------------------
+          job={selectedJob} // ❌ This causes issues
+        ----------------------------------------------------
+          jobId={selectedJob.id}  // ✅ Pass only the job ID
+          jobs={jobs}  // ✅ Pass the full list of jobs
+        --------------------------------------------------
+      */}
       {/* Modal */}
       {selectedJob && 
       <JobModal 
-        job={selectedJob}
+        jobId={selectedJob.id}  // Pass only the job ID
+        jobs={jobs}  // ✅ Pass the full list of jobs
         onClose={() => setSelectedJob(null)}
         onUpdateStatus={onUpdateStatus}
         onAddComment={onAddComment}

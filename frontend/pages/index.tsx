@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState, useOptimistic, startTransition} from 'react';
 import { GetStaticProps } from 'next';
 import AddJobForm from '../components/AddJobForm';
 import JobList from '../components/JobList';
@@ -16,6 +16,22 @@ type HomeProps = {
 const Home = ({ initialJobs }: HomeProps ) => {
   const [jobs, setJobs] = useState<Job[]>(initialJobs);
 
+  /* 🔥 useOptimistic for Optimistic UI
+    jobs: the initial array of Job objects.
+    Function (prevJobs, updatedJob) => ...:
+    Takes the previous array of jobs, prevJobs,
+    Finds the single updated job passed in (named updatedJob),
+    Replaces the matching job in prevJobs with updatedJob.
+  
+  */
+   const [optimisticJobs, updateOptimisticJobs] = useOptimistic<Job[], Job>( // State, Action
+    jobs, // Initial State: array of jobs
+    (prevJobs, updatedJob) => // PrevState, Action
+      prevJobs.map((job) => (job.id === updatedJob.id ? updatedJob : job)) // ✅ Update only the relevant job
+  );;
+
+
+
 
   const handleAddJob = async ( jobData: Partial<Job>) => {
     const newJob = await postJob(jobData);
@@ -27,11 +43,22 @@ const Home = ({ initialJobs }: HomeProps ) => {
     setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
   };
 
-  const handleUpdateStatus = async (id: number, status: string) => {
-    const updatedJob = await updateStatus(id, status)
-    setJobs((prevJobs) =>
-      prevJobs.map((job) => (job.id === id ? updatedJob : job))
-    );
+  const handleUpdateStatus = async (id: number, newStatus: string) => {
+    //  Optimistically update state before API request
+    startTransition(() => {
+      const updatedJob = { ...jobs.find((job) => job.id === id), status: newStatus } as Job; // First Find the Selected Job & update the status
+      updateOptimisticJobs(updatedJob); // The second parameter to updateOptimisticJobs must be the new job object, not function
+    });
+  
+    try {
+      const updatedJob = await updateStatus(id, newStatus)
+      setJobs((prevJobs) =>
+        prevJobs.map((job) => (job.id === id ? updatedJob : job))
+      );
+    } catch (error) {
+      console.error("Failed to update job status:", error);
+    }
+    
   };
 
   const handleAddComment = async (id: number, comment: string) => {
@@ -62,7 +89,7 @@ const Home = ({ initialJobs }: HomeProps ) => {
         <div className="w-full lg:w-2/3 p-4 bg-white rounded-lg">
          <AddJobForm onAdd={handleAddJob} />
           <JobList
-            jobs={jobs}
+            jobs={optimisticJobs}
             onUpdateStatus={handleUpdateStatus}
             onAddComment={handleAddComment}
             onDelete={handleDeleteJob}
@@ -76,8 +103,7 @@ const Home = ({ initialJobs }: HomeProps ) => {
 
 export default Home;
 
-
-// Difference between getStaticProps and getServerSideProps
+//Instead of fetching it over HTTP in getStaticProps, you can import it directly. This avoids any HTTP errors during the build.
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
