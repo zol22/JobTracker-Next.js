@@ -1,5 +1,5 @@
 // components/JobModal.tsx
-import { useState, useOptimistic, startTransition, useEffect} from "react";
+import { useState, useRef, useOptimistic, startTransition, useEffect} from "react";
 import { Job } from "../types";
 
 type JobModalProps = {
@@ -13,27 +13,34 @@ type JobModalProps = {
 const JobModal = ({ jobId, jobs, onClose, onUpdateStatus, onAddComment }: JobModalProps) => {
   
   const [comment, setComment] = useState("");
+  const modalRef = useRef<HTMLDivElement>(null); // Ref for modal container
 
   // Find the latest job using jobId
   const job = jobs.find((j) => j.id === jobId);
 
-  // If job is not found (due to deletion), close modal automatically
   useEffect(() => {
+    // If job is not found (due to deletion), close modal automatically
     if (!job) {
       onClose();
+      return
     }
-  }, [job]);
+    // Detect outside clicks to close modal
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+
+  }, [job]); // ✅ Runs when `job` changes (or gets deleted)
 
   if (!job) return null; // Ensure job exists before rendering
 
-  // ✅ Step 1: Sync the modal state with the job's latest status
-  useEffect(() => {
-    startTransition(() => {
-      updateOptimisticStatus(job.status);
-    });
-  }, [job.status]); // ✅ This ensures the dropdown updates when status changes in JobList
-
-  // ✅ Step 2: Optimistic UI for status updates inside the modal
+  // ✅ Step 1: Optimistic UI for status updates inside the modal
   const [optimisticStatus, updateOptimisticStatus] = useOptimistic<string, string>(
     job.status,
     (_prevStatus, newStatus) => newStatus
@@ -45,17 +52,17 @@ const JobModal = ({ jobId, jobs, onClose, onUpdateStatus, onAddComment }: JobMod
   const handleStatusChange =  (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
     
-    // ✅ Step 3: Update the dropdown instantly before API request
+    // ✅ Step 2: Update the dropdown instantly before API request
     startTransition(() => {
       updateOptimisticStatus(newStatus); // Instant UI update
     });
 
-    // ✅ Step 4: Call parent function to update job list globally
+    // ✅ Step 3: Call parent function to update job list globally
     onUpdateStatus(job.id, newStatus); // Persist to backend
   }
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg w-3/4 shadow-lg">
+      <div ref={modalRef} className="bg-white p-6 rounded-lg w-3/4 shadow-lg" onClick={(e) => e.stopPropagation()}>{/* Stop click events from propagating inside the modal */}
         <h3 className="text-lg font-bold mb-2">{job.title}</h3>
         <p className="text-sm mb-4">{job.company}</p>
         <p className="text-sm mb-4">{job.description}</p>
