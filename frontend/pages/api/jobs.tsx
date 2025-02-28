@@ -6,6 +6,7 @@ import { listJobs, postAjob } from "@/controllers/jobs.controller";
 
 export default async function handler(req : NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
+    res.setHeader("Cache-Control", "no-store, max-age=0"); // 👈 Prevents caching
     return listJobs(req,res);
   } else if (req.method === 'POST') {
     // Create a new job

@@ -6,15 +6,28 @@ import Reminders from '../components/Reminders';
 import { Job } from '../types';
 import Affirmation from '../components/Affirmation';
 import Image from 'next/image';
-import { addComment, deleteJob, postJob, updateStatus } from '@/lib/api';
+import { getJobs } from '@/lib/api';
 import { jobsList } from '@/controllers/jobs.controller';
+import { useJobStore } from "@/store/useJobStore";
+import { useEffect } from "react";
 
-type HomeProps = {
-  initialJobs: Job[]
-}
 
-const Home = ({ initialJobs }: HomeProps ) => {
-  const [jobs, setJobs] = useState<Job[]>(initialJobs);
+const Home = () => {
+
+  const { optimisticJobs, setJobs, handleAddJob, handleDeleteJob, handleUpdateStatus, handleAddComment } = useJobStore();
+
+   // 🔥 Fetch jobs on component mount
+   useEffect(() => {
+    async function fetchJobs() {
+      const jobsData = await getJobs();
+      console.log("Fetched jobs from API:", jobsData); // ✅ Debug API response
+      setJobs(jobsData);
+    }
+    fetchJobs();
+  }, [setJobs]);
+
+
+  //const [jobs, setJobs] = useState<Job[]>(initialJobs);
 
   /* 🔥 useOptimistic for Optimistic UI
     jobs: the initial array of Job objects.
@@ -24,7 +37,8 @@ const Home = ({ initialJobs }: HomeProps ) => {
     Replaces the matching job in prevJobs with updatedJob.
   
   */
-   const [optimisticJobs, updateOptimisticJobs] = useOptimistic<Job[], Job>( // State, Action
+ 
+ {/*   const [optimisticJobs, updateOptimisticJobs] = useOptimistic<Job[], Job>( // State, Action
     jobs, // Initial State: array of jobs
     (prevJobs, updatedJob) => // PrevState, Action
       prevJobs.map((job) => (job.id === updatedJob.id ? updatedJob : job)) // ✅ Update only the relevant job
@@ -67,6 +81,7 @@ const Home = ({ initialJobs }: HomeProps ) => {
       prevJobs.map((job) => (job.id === id ? updatedJob : job))
     );
   };
+*/}
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
@@ -104,11 +119,11 @@ const Home = ({ initialJobs }: HomeProps ) => {
 export default Home;
 
 //Instead of fetching it over HTTP in getStaticProps, you can import it directly. This avoids any HTTP errors during the build.
-export const getStaticProps: GetStaticProps = async () => {
+{/*export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       initialJobs : jobsList,
     },
   };
 
-};
+};*/}

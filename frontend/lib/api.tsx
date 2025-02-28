@@ -3,9 +3,20 @@ import { Job } from "@/types";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getJobs() {
-  const res = await fetch(`${API_URL}/api/jobs`);
+  try {
+    const res = await fetch(`${API_URL}/api/jobs`);
+    if (!res.ok) {
+      console.error("❌ API request failed:", res.status, res.statusText);
+      return [];
+   }
   const data = await res.json();
-  return data.jobs || [];
+  console.log("✅ API Response:", data); // 🚀 Debug the response
+  return data.jobsList || [];
+  } catch (error) {
+    console.error("❌ Error fetching jobs:", error);
+    return [];
+  }
+ 
 
 }
 

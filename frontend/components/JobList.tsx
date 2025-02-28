@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Job } from "../types";
 import JobModal from "./JobModal";
 
@@ -34,6 +34,10 @@ const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps)
       ? jobs
       : jobs.filter((job) => statusCategories[activeTab]?.includes(job.status));// Why Use ?. (Optional Chaining)?: Ensures that statusCategories[activeTab] exists before calling .includes() to avoid errors.
 
+  const handleCloseModal =  useCallback(() => {
+    setSelectedJob(null)
+  }, [])
+  
   return (
     <div className="mt-4 p-6 bg-neutral-100 rounded-lg shadow-md">
       <h2 className="uppercase tracking-wide text-gray-700 text-xl font-bold mb-4">
@@ -135,7 +139,7 @@ const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps)
       <JobModal 
         jobId={selectedJob.id}  // Pass only the job ID
         jobs={jobs}  // ✅ Pass the full list of jobs
-        onClose={() => setSelectedJob(null)}
+        onClose={handleCloseModal}
         onUpdateStatus={onUpdateStatus}
         onAddComment={onAddComment}
       />}

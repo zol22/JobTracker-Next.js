@@ -18,6 +18,18 @@ const JobModal = ({ jobId, jobs, onClose, onUpdateStatus, onAddComment }: JobMod
   // Find the latest job using jobId
   const job = jobs.find((j) => j.id === jobId);
 
+  // ✅ Ensure Hooks always run by using a fallback job
+  const fallbackJob = { id: -1, title: "Unknown", company: "", description: "", status: "Unknown", comments: [] };
+  const currentJob = job || fallbackJob; // Avoids conditional hook execution
+
+
+  // ✅ Step 1: Optimistic UI for status updates inside the modal
+  const [optimisticStatus, updateOptimisticStatus] = useOptimistic<string, string>(
+    currentJob.status,
+    (_prevStatus, newStatus) => newStatus
+  );
+
+
   useEffect(() => {
     // If job is not found (due to deletion), close modal automatically
     if (!job) {
@@ -38,13 +50,7 @@ const JobModal = ({ jobId, jobs, onClose, onUpdateStatus, onAddComment }: JobMod
 
   }, [job]); // ✅ Runs when `job` changes (or gets deleted)
 
-  if (!job) return null; // Ensure job exists before rendering
-
-  // ✅ Step 1: Optimistic UI for status updates inside the modal
-  const [optimisticStatus, updateOptimisticStatus] = useOptimistic<string, string>(
-    job.status,
-    (_prevStatus, newStatus) => newStatus
-  );
+  //if (!job) return null; // Ensure job exists before rendering
 
 
   console.log(`This is the optimistic status from JobModal: ${optimisticStatus}`)
@@ -58,14 +64,14 @@ const JobModal = ({ jobId, jobs, onClose, onUpdateStatus, onAddComment }: JobMod
     });
 
     // ✅ Step 3: Call parent function to update job list globally
-    onUpdateStatus(job.id, newStatus); // Persist to backend
+    onUpdateStatus(currentJob.id, newStatus); // Persist to backend
   }
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
       <div ref={modalRef} className="bg-white p-6 rounded-lg w-3/4 shadow-lg" onClick={(e) => e.stopPropagation()}>{/* Stop click events from propagating inside the modal */}
-        <h3 className="text-lg font-bold mb-2">{job.title}</h3>
-        <p className="text-sm mb-4">{job.company}</p>
-        <p className="text-sm mb-4">{job.description}</p>
+        <h3 className="text-lg font-bold mb-2">{currentJob.title}</h3>
+        <p className="text-sm mb-4">{currentJob.company}</p>
+        <p className="text-sm mb-4">{currentJob.description}</p>
         <h4 className="text-md font-semibold">Status</h4>
         <select
           value={optimisticStatus}
@@ -84,8 +90,8 @@ const JobModal = ({ jobId, jobs, onClose, onUpdateStatus, onAddComment }: JobMod
         </select>
         <h4 className="text-md font-semibold">Comments</h4>
         <ul className="list-disc ml-4 mb-4">
-          {job.comments && job.comments.length > 0 ? (
-            job.comments.map((comment, index) => (
+          {currentJob.comments && currentJob.comments.length > 0 ? (
+            currentJob.comments.map((comment, index) => (
               <li key={index}>{comment}</li>
             ))
           ) : (
@@ -102,7 +108,7 @@ const JobModal = ({ jobId, jobs, onClose, onUpdateStatus, onAddComment }: JobMod
           <button
             className="bg-neutral-800 text-white px-4 py-2 rounded-lg hover:bg-neutral-700"
             onClick={() => {
-              onAddComment(job.id, comment);
+              onAddComment(currentJob.id, comment);
               setComment("");
             }}
           >
