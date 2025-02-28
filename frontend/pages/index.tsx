@@ -1,30 +1,20 @@
-import { useState, useOptimistic, startTransition} from 'react';
-import { GetStaticProps } from 'next';
-import AddJobForm from '../components/AddJobForm';
-import JobList from '../components/JobList';
-import Reminders from '../components/Reminders';
-import { Job } from '../types';
-import Affirmation from '../components/Affirmation';
 import Image from 'next/image';
-import { getJobs } from '@/lib/api';
-import { jobsList } from '@/controllers/jobs.controller';
-import { useJobStore } from "@/store/useJobStore";
 import { useEffect } from "react";
-
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/router";
+import { SignInButton } from "@clerk/nextjs";
 
 const Home = () => {
 
-  const { optimisticJobs, setJobs, handleAddJob, handleDeleteJob, handleUpdateStatus, handleAddComment } = useJobStore();
+  const { isSignedIn } = useAuth(); // Get user auth status
+  const router = useRouter();
 
-   // 🔥 Fetch jobs on component mount
-   useEffect(() => {
-    async function fetchJobs() {
-      const jobsData = await getJobs();
-      console.log("Fetched jobs from API:", jobsData); // ✅ Debug API response
-      setJobs(jobsData);
+  // 🔄 Redirect to Dashboard if Signed In
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push("/dashboard");
     }
-    fetchJobs();
-  }, [setJobs]);
+  }, [isSignedIn, router]);
 
 
   //const [jobs, setJobs] = useState<Job[]>(initialJobs);
@@ -43,9 +33,6 @@ const Home = () => {
     (prevJobs, updatedJob) => // PrevState, Action
       prevJobs.map((job) => (job.id === updatedJob.id ? updatedJob : job)) // ✅ Update only the relevant job
   );;
-
-
-
 
   const handleAddJob = async ( jobData: Partial<Job>) => {
     const newJob = await postJob(jobData);
@@ -84,35 +71,21 @@ const Home = () => {
 */}
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Left Section */}
-        <div className="w-full lg:w-1/3 p-4 rounded-lg">
-          <Affirmation />
-          <Reminders />
-          <Image
-            src="/images/laptop.jpg"
-            alt="Laptop image"
-            width={500}
-            height={500}
-            priority
-            className="w-full h-auto rounded-lg"
-          />
-        </div>
-  
-        {/* Right Section */}
-        <div className="w-full lg:w-2/3 p-4 bg-white rounded-lg">
-         <AddJobForm onAdd={handleAddJob} />
-          <JobList
-            jobs={optimisticJobs}
-            onUpdateStatus={handleUpdateStatus}
-            onAddComment={handleAddComment}
-            onDelete={handleDeleteJob}
-          />
-        </div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome to Job Tracker</h1>
+        <p className="text-gray-600 text-lg mb-6">
+          Manage your job applications efficiently with Job Tracker.
+        </p>
+           {/* ✅ Use asChild to allow Tailwind styles on the button */}
+        <SignInButton mode="modal">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+            Get Started
+          </button>
+        </SignInButton>
+        <Image src="/images/laptop.jpg" alt="Job tracking" width={400} height={300} className="rounded-lg mt-6" />
       </div>
-    </div>
-  );
+    );
+
   
 };
 
