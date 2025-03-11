@@ -1,5 +1,10 @@
+// This is Client Component
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Job } from "@/types";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
 export const jobsList : Job[] = [
     {
       id: 1,
@@ -60,19 +65,15 @@ export const jobsList : Job[] = [
     },
   ];
 
-export const listJobs = async (req: NextApiRequest, res:NextApiResponse) => {
-    try {
-        if (!jobsList) {
-          return res.status(404).json({ message: 'Jobs not Found', error: 'Not Found: The requested resource does not exist.'})
-        }
-        res.status(200).json({message:'Jobs are listed successfully', jobsList}) // Sends back the newly created job  as a JSON response.
-      } catch (error) {
-        return res.status(500).json({ error: 'Internal Server Error' })
-      }
+export const listJobs = async (userId:string ) => {
+  return await prisma.job.findMany({
+    where: { userId}
+  })
 }
 
-export const postAjob = async (req: NextApiRequest, res:NextApiResponse) => {
-    try { 
+export const postAjob = async (data: {title: string, company: string, description:string, status: string, userId: string}) => {
+  return await prisma.job.create({ data })  
+  {/*try { 
         const { title, company, description, status } = req.body;
         if (!title || !company || !description) {
           return res.status(400).json({ error: 'Title, company, and description are required.' });
@@ -91,7 +92,7 @@ export const postAjob = async (req: NextApiRequest, res:NextApiResponse) => {
     } catch(error) {
         console.error('Error creating job:', error);
         return res.status(500).json({ error: 'Internal Server Error' })
-      }
+      }*/ }
 }
 
 export const addAComment = async (req: NextApiRequest, res:NextApiResponse) => {

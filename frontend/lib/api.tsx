@@ -11,7 +11,7 @@ export async function getJobs() {
    }
   const data = await res.json();
   console.log("✅ API Response:", data); 
-  return data.jobsList || []; // Return only the JobList Array, not message:{} object
+  return data || []; // Return only the JobList Array, not message:{} object
   } catch (error) {
     console.error("❌ Error fetching jobs:", error);
     return [];
