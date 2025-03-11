@@ -13,3 +13,8 @@ export interface Job {
     setSelectedTab: (tab:string) => void,
     selectedTab : string
   }
+
+  export type NavBarProps = {
+    setSelectedTab: (tab:string) => void,
+  };
+  

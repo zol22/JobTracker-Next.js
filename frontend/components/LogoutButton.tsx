@@ -5,7 +5,7 @@ const LogoutButton = () => {
 
   return isSignedIn ? (
     <SignOutButton>
-        <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+        <button className=" bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
             Logout
         </button>
     </SignOutButton>) : null;
