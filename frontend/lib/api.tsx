@@ -10,23 +10,30 @@ export async function getJobs() {
       return [];
    }
   const data = await res.json();
-  console.log("✅ API Response:", data); // 🚀 Debug the response
-  return data.jobsList || [];
+  console.log("✅ API Response:", data); 
+  return data.jobsList || []; // Return only the JobList Array, not message:{} object
   } catch (error) {
     console.error("❌ Error fetching jobs:", error);
     return [];
   }
- 
-
 }
 
 export async function postJob(jobData: Partial <Job>) {
-  const res = await fetch(`${API_URL}/api/jobs`, {
+  try {
+    const res = await fetch(`${API_URL}/api/jobs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(jobData),
-  });
+    });  
+    if (!res.ok) {
+      console.error("❌ API request failed:", res.status, res.statusText);
+      return [];
+   }
   return await res.json();
+  } catch (error) {
+    console.error("❌ Error Posting a job:", error);
+    return [];
+  }
 }
 
 export async function deleteJob(id: number) {

@@ -2,11 +2,11 @@ import Image from 'next/image';
 import { useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/router";
-import { SignInButton } from "@clerk/nextjs";
+import LoginButton from '@/components/LoginButton';
 
 const Home = () => {
 
-  const { isSignedIn } = useAuth(); // Get user auth status
+  const { isSignedIn } = useAuth(); // Get user auth status, this is a boolean
   const router = useRouter();
 
   // 🔄 Redirect to Dashboard if Signed In
@@ -16,8 +16,7 @@ const Home = () => {
     }
   }, [isSignedIn, router]);
 
-
-  //const [jobs, setJobs] = useState<Job[]>(initialJobs);
+  console.log(`Thi is isSignIn from Clerk ${isSignedIn}`)
 
   /* 🔥 useOptimistic for Optimistic UI
     jobs: the initial array of Job objects.
@@ -76,12 +75,7 @@ const Home = () => {
         <p className="text-gray-600 text-lg mb-6">
           Manage your job applications efficiently with Job Tracker.
         </p>
-           {/* ✅ Use asChild to allow Tailwind styles on the button */}
-        <SignInButton mode="modal">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-            Get Started
-          </button>
-        </SignInButton>
+        <LoginButton />
         <Image src="/images/laptop.jpg" alt="Job tracking" width={400} height={300} className="rounded-lg mt-6" />
       </div>
     );
@@ -90,13 +84,3 @@ const Home = () => {
 };
 
 export default Home;
-
-//Instead of fetching it over HTTP in getStaticProps, you can import it directly. This avoids any HTTP errors during the build.
-{/*export const getStaticProps: GetStaticProps = async () => {
-  return {
-    props: {
-      initialJobs : jobsList,
-    },
-  };
-
-};*/}

@@ -1,3 +1,4 @@
+/* Calls function from /lib/api.tsx to Fetch */
 import { create } from 'zustand'
 import { Job } from '@/types'
 import { addComment, deleteJob, postJob, updateStatus } from "@/lib/api";

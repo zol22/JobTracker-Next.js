@@ -9,3 +9,7 @@ export interface Job {
     history: { status: string; date: string }[];
   }
   
+  export type SidebarProps = {
+    setSelectedTab: (tab:string) => void,
+    selectedTab : string
+  }

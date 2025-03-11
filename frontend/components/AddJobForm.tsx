@@ -9,19 +9,29 @@ const AddJobForm = ({ onAdd }: AddJobFormProps) => {
   const [company, setCompany] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
 
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onAdd({ title, company, description, status: 'Applied' });
+    setSuccessMessage(`✅ Job "${title}" at ${company} added successfully! Go to 'All Jobs' Tab to see it :)`);
     setTitle('');
     setCompany('');
     setDescription('');
+    // Remove message after 3 seconds
+    setTimeout(() => setSuccessMessage(""), 6000);
   };
 
   return (
     <div className="mb-4 p-4 border border-gray-300 rounded-lg shadow-sm bg-white w-full max-w-2xl">
       <h2 className="text-sm uppercase mb-4 tracking-wide text-gray-700 font-bold">Add New Job</h2>
+      {/* ✅ Success Message */}
+      {successMessage && (
+        <div className="mb-4 p-3 bg-green-100 text-green-700 border border-green-500 rounded-md">
+          {successMessage}
+        </div>
+      )}
       <div className="flex flex-wrap gap-x-6 gap-y-2">
         <div className='flex-1 min-w-[200px] px-3 mb-6 border-b border-gray-400 '>
         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Job Title</label>
