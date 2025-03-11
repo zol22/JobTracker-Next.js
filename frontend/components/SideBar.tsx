@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { SidebarProps } from '@/types'
 import { menuItems } from './menuItems'
-import LogoutButton from './LogoutButton'
 
 const SideBar = ( {setSelectedTab, selectedTab}: SidebarProps) => {
 

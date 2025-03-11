@@ -1,3 +1,4 @@
+/* Handles UI */
 import JobList from "./JobList"
 import AddJobForm from "./AddJobForm";
 import Stats from "./Stats";

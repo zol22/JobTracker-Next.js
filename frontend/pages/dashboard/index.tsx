@@ -10,7 +10,7 @@ import { getJobs } from "@/lib/api";
 
 export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState("AllJobs"); // Default page
-  const { user, isSignedIn } = useUser();
+  const { isSignedIn } = useUser();
   const { setJobs } = useJobStore();
   const [loading, setLoading] = useState(true);
 

@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Job } from "../types";
 import JobModal from "./JobModal";
-import { getJobs } from "@/lib/api";
-import { useJobStore } from "@/store/useJobStore";
 
 type JobListProps = {
   jobs: Job[]; // make it optional to allow a default value

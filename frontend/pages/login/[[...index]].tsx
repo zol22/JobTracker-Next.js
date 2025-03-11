@@ -1,11 +1,10 @@
 import { SignIn } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+//import { useUser } from "@clerk/nextjs";
+//import { useRouter } from "next/router";
 
 const LoginPage = () => {
-  const { isSignedIn } = useUser();
-  const router = useRouter();
+  //const { isSignedIn } = useUser();
+  //const router = useRouter();
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">

@@ -1,4 +1,4 @@
-import { Briefcase, PlusCircle, BarChart, Heart, Bell, LogOut } from "lucide-react";
+import { Briefcase, PlusCircle, BarChart, Heart, Bell} from "lucide-react";
 
 export const menuItems = [
   { id: "AllJobs", label: "All Jobs", icon: Briefcase },
