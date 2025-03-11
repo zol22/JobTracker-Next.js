@@ -14,23 +14,8 @@ type JobListProps = {
 const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps) => {
   
   const [selectedJob, setSelectedJob] = useState<Job | null>(null); // Tracks the job being viewed in the modal. It is either a Job object or null when no job is selected.
-  //const [comment, setComment] = useState("");
   const [activeTab, setActiveTab] = useState("All"); // Tracks the currently selected tab for filtering jobs
-  
-  
-  const {setJobs} =  useJobStore();
-    // Fetch jobs when component mounts
-    useEffect(() => {
-      const fetchJobs = async () => {
-        try {
-          const jobsData = await getJobs(); // Fetch jobs from API
-          setJobs(jobsData); // Update jobs and OptimisticJobs from Zustand Store
-        } catch (error) {
-          console.error("Failed to fetch jobs:", error);
-        }
-      };
-      fetchJobs(); // Call async function
-    }, [setJobs]);
+
   /* 
     Key Type (string): Specifies that the keys of this object are strings ("All", "Applied", etc.).
     Value Type (string[]): Specifies that the values are arrays of strings (e.g., job statuses like ["Applied", "Viewed"]).
