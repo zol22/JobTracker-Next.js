@@ -130,6 +130,10 @@ const JobModal = ({ jobId, onClose }: JobModalProps) => {
           </button>
         </div>
       </div>
+
+
+
+
     </div>
   );
 };

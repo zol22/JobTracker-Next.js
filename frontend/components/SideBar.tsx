@@ -2,7 +2,7 @@ import React from 'react'
 import { SidebarProps } from '@/types'
 import { menuItems } from './menuItems'
 
-// Set the selectedTab  to the corresponding tab when clicking it and it adds a custom class
+// Set the selectedTab  to the corresponding tab when clicking it and it adds a custom className
 const SideBar = ( {setSelectedTab, selectedTab}: SidebarProps) => {
 
   return (

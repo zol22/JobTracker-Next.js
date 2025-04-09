@@ -15,7 +15,7 @@ const DashboardContent = ({ selectedTab }: DashboardContentProps) => {
     const { handleAddJob } = useJobStore();
 
   return (
-    <div className="p-4 bg-white shadow-lg rounded-lg">
+    <div className="shadow-lg rounded-lg">
       {selectedTab === "AllJobs" && <JobList />}
       {selectedTab === "AddJob" && <AddJobForm onAdd={handleAddJob} />}
       {selectedTab === "Stats" && <Stats />}

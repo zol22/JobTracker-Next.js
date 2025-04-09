@@ -110,13 +110,13 @@ const JobList = () => {
                     className="text-blue-500 hover:underline"
                     onClick={() => setSelectedJob(job)}
                   >
-                    View
+                    Edit
                   </button>
                   <button
                     className="text-red-500 hover:underline"
                     onClick={() => handleDeleteJob(job.id)}
                   >
-                    X
+                    Delete
                   </button>
                 </td>
 

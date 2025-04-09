@@ -1,4 +1,9 @@
 import { useState } from 'react';
+import { BsFilePerson } from "react-icons/bs";
+import { MdAddHomeWork } from "react-icons/md";
+import { BiDetail } from "react-icons/bi";
+import { GrStatusInfo } from "react-icons/gr";
+
 
 type AddJobFormProps = {
   onAdd: (jobData: { title: string; company: string; description: string; status?: string }) => void;
@@ -24,54 +29,67 @@ const AddJobForm = ({ onAdd }: AddJobFormProps) => {
   };
 
   return (
-    <div className="mb-4 p-4 border border-gray-300 rounded-lg shadow-sm bg-white w-full">
-      <h2 className="text-sm uppercase mb-4 tracking-wide text-gray-700 font-bold">Add New Job</h2>
+    <div className="mb-4 bg-neutral-100 w-full mt-4 p-6 rounded-lg shadow-lg">
+      <h2 className=" uppercase mb-5 tracking-wide text-gray-700 font-bold  text-xl">Add New Job</h2>
       {/* ✅ Success Message */}
       {successMessage && (
         <div className="mb-4 p-3 bg-green-100 text-green-700 border border-green-500 rounded-md">
           {successMessage}
         </div>
       )}
-      <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center">
-        <div className='flex-1 min-w-[200px] px-3 mb-6 border-b border-gray-400 '>
-        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Job Title</label>
+      <div className="flex flex-col  justify-center items-center">
+
+        <div className=' flex justify-center items-center gap-x-2 md:gap-x-8 w-full md:w-[600px] px-3 mb-6 border-b border-gray-500 '>
+          <div className='flex items-center gap-x-2  w-1/2 md:w-1/3'>
+              <BsFilePerson />
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold">Job Title:</label>
+          </div>
           <input
             type="text"
             placeholder="Enter job title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+            className= " text-sm sm:text-base appearance-none border border-gray-500 shadow-sm focus:shadow-md  focus:placeholder-gray-600 bg-transparent border-none rounded-md w-full text-gray-600 mr-3 py-3 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline"
           />
         </div>
 
-        <div className='flex-1 min-w-[200px] px-3 mb-6 border-b border-gray-400'>
-          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Company</label>
+        <div className=' flex justify-center items-center gap-x-2 md:gap-x-8  w-full md:w-[600px] px-3 mb-6 border-b border-gray-400'>
+          <div className='flex items-center gap-x-2 w-1/2 md:w-1/3'>
+              <MdAddHomeWork />
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold">Company:</label>
+            </div>
           <input
             type="text"
             placeholder="Enter company name"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+            className="text-sm sm:text-base appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
           />
         </div>
 
-        <div className='flex-1 min-w-[200px] px-3 mb-6 border-b border-gray-400'>
-          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Job Description</label>
+        <div className=' flex justify-center items-center gap-x-2 md:gap-x-8  w-full  md:w-[600px]  px-3 mb-6 border-b border-gray-400'>
+          <div className='flex items-center gap-x-2  w-1/2 md:w-1/3'>
+            <BiDetail />
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold">Description:</label>
+          </div>
           <input
             type="text"
-            placeholder="Enter job description"
+            placeholder="Enter description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+            className="text-sm sm:text-base appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
           />
         </div>
 
-        <div className='w-full md:w-1/2 px-3 mb-6 '>
-          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Status</label>
+        <div className='flex justify-center items-center gap-x-2 md:gap-x-8   w-full md:w-[600px] px-3 mb-6 '>
+          <div className='flex items-center gap-x-2  w-1/2 md:w-1/3'>
+            <GrStatusInfo />
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold">Status:</label>
+          </div>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className=" block w-1/2 bg-gray-100 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            className=" block w-full md:w-1/2 bg-gray-100 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           >
             <option value="Applied">Applied</option>
             <option value="Viewed">Viewed</option>

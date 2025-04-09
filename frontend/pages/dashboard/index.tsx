@@ -19,16 +19,16 @@ export default function Dashboard() {
     <div className="min-h-screen p-6 bg-gray-100">
 
       {/* Main Dashboard Content */}
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-3">
         {/* Left Section */}
         <div className="w-full lg:w-1/5  rounded-lg">
          <SideBar setSelectedTab={setSelectedTab} selectedTab={selectedTab} />
         </div>
 
         {/* Right Section changes based of SideBar Selection */}
-        <div className="w-full lg:w-4/5 p-4 rounded-lg">
+        <div className="w-full p-4 rounded-lg">
           {loading ? (
-            <p className="text-center text-gray-600"> Loading jobs... </p>
+            <p className="text-center"> Loading jobs... </p>
           ): <DashboardContent selectedTab={selectedTab}/>
  }
         </div>
