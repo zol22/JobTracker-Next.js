@@ -4,7 +4,9 @@ import { useRouter } from "next/router";
 import Hero from "@/components/Hero";
 import Container from '@/components/Container';
 import Benefits from '@/components/Benefits/Benefits';
+import Testimonials from "@/components/Testimonials";
 
+import Section from "@/components/Section";
 
 const Home = () => {
 
@@ -24,6 +26,14 @@ const Home = () => {
         <Hero />
         <Container>
           <Benefits />
+
+          <Section
+          id="testimonials"
+          title="What Our Clients Say"
+          description="Hear from those who have partnered with us."
+        >
+          <Testimonials />
+        </Section>
         </Container>
 
       </>

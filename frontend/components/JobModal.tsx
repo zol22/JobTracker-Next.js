@@ -10,12 +10,12 @@ type JobModalProps = {
 
 const JobModal = ({ jobId, onClose }: JobModalProps) => {
   
-  const { fetchComments, handleAddComment, jobs, handleUpdateStatus} = useJobStore();
+  const { fetchComments, handleAddComment, jobs, handleUpdateStatus, optimisticJobs} = useJobStore();
   const [comment, setComment] = useState("");
   const modalRef = useRef<HTMLDivElement>(null); // Ref for modal container
 
   // Find the current job using jobId from Zustand Store
-  const job = jobs.find((j) => j.id === jobId); 
+  const job = optimisticJobs.find((j) => j.id === jobId); 
   // Always execute hooks BEFORE any conditional return
   const [optimisticStatus, updateOptimisticStatus] = useOptimistic<string, string>(
     job?.status ?? "Unkown", // Initial status
@@ -25,6 +25,17 @@ const JobModal = ({ jobId, onClose }: JobModalProps) => {
   console.log(" Job Id in Modal", jobId);
   console.log(" Job in Modal", job);
 
+  
+      // ✅ Sync status with store when job updates
+  useEffect(() => {
+    if (job?.status) {
+       startTransition(() => {
+        updateOptimisticStatus(job.status);
+      });
+    }
+  }, [job?.status]); // ✅ Runs when `job` changes  
+
+  
     // Fetch comments when modal opens
     useEffect(() => { // Fetch comments when modal is opened
       fetchComments(jobId);

@@ -16,6 +16,13 @@ export interface Job {
     createdAt?: string;
 
   }
+  export interface ITestimonial {
+    name: string;
+    role: string;
+    message: string;
+    avatar: string;
+}
+
   
   export type SidebarProps = {
     setSelectedTab: (tab:string) => void,

@@ -43,25 +43,36 @@ type JobState = {
       }));
     },
     handleUpdateStatus: async (id, newStatus) => {
-      // 🔥 Optimistic UI update, This immediately updates the UI before waiting for the API.
+      // Step 1: Optimistically update status
       set((state) => ({
         optimisticJobs: state.optimisticJobs.map((job) =>
           job.id === id ? { ...job, status: newStatus } : job
         ),
       }));
-      
-      // After the real API call succeeds, we update both jobs and optimisticJobs.
-      // This ensures consistency between the frontend and database.
+    
       try {
+        // Step 2: Make API request to update job
         const updatedJob = await updateStatus(id, newStatus);
-        set((state) => ({
-          jobs: state.jobs.map((job) => (job.id === id ? {... updatedJob, id: job.id} : job)),
-          optimisticJobs: state.optimisticJobs.map((job) => (job.id === id ? {... updatedJob, id: job.id} : job)),
-        }));
+    
+        // Step 3: Merge updated fields with existing job
+        set((state) => {
+          const mergeUpdate = (jobList: typeof state.jobs) =>
+            jobList.map((job) =>
+              job.id === id
+                ? { ...job, ...updatedJob } // merge the updated fields into the old job
+                : job
+            );
+    
+          return {
+            jobs: mergeUpdate(state.jobs),
+            optimisticJobs: mergeUpdate(state.optimisticJobs),
+          };
+        });
       } catch (error) {
-        console.error("Failed to update job status:", error);
+        console.error("❌ Failed to update job status:", error);
       }
     },
+    
     fetchComments: async (id) => {
       try {
         const comments = await getComments(id); // returns only comments array
