@@ -1,4 +1,4 @@
-// This is Server
+// This is Server, Routes
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { listJobs, postAjob } from "@/controllers/jobs.controller";

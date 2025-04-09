@@ -10,16 +10,13 @@ type DashboardContentProps = {
   selectedTab: string;
 };
 
+// Displays the corresponding content based on the selectedTab which was set in SideBack when user clicks it
 const DashboardContent = ({ selectedTab }: DashboardContentProps) => {
-    const { optimisticJobs, handleAddJob, handleDeleteJob, handleUpdateStatus, handleAddComment } = useJobStore();
+    const { handleAddJob } = useJobStore();
 
   return (
     <div className="p-4 bg-white shadow-lg rounded-lg">
-      {selectedTab === "AllJobs" && <JobList 
-            jobs={optimisticJobs}
-            onUpdateStatus={handleUpdateStatus}
-            onAddComment={handleAddComment}
-            onDelete={handleDeleteJob} />}
+      {selectedTab === "AllJobs" && <JobList />}
       {selectedTab === "AddJob" && <AddJobForm onAdd={handleAddJob} />}
       {selectedTab === "Stats" && <Stats />}
       {selectedTab === "Affirmation" && <Affirmation />}

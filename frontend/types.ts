@@ -5,8 +5,16 @@ export interface Job {
     company: string;
     description: string;
     status: string;
-    comments: string[];
-    history: { status: string; date: string }[];
+    comments: Comment[];
+    createdAt: string;
+    userId: string;
+  }
+
+  export interface Comment {
+    id?: string;
+    content: string;
+    createdAt?: string;
+
   }
   
   export type SidebarProps = {
@@ -18,3 +26,32 @@ export interface Job {
     setSelectedTab: (tab:string) => void,
   };
   
+  export interface IMenuItem {
+    text: string;
+    url: string;
+}
+
+export interface ISocials {
+  facebook?: string;
+  github?: string;
+  instagram?: string;
+  linkedin?: string;
+  threads?: string;
+  twitter?: string;
+  youtube?: string;
+  x?: string;
+  [key: string]: string | undefined;
+}
+
+export interface IBenefit {
+  title: string;
+  description: string;
+  imageSrc: string;
+  bullets: IBenefitBullet[]
+}
+
+export interface IBenefitBullet {
+  title: string;
+  description: string;
+  icon: React.JSX.Element;
+}

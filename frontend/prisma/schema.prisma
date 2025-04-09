@@ -18,6 +18,15 @@ model Job {
   company     String
   description String
   status      String   @default("Applied")
+  comments    Comment[] // one to many relationship, each job can have multiple comments
   createdAt   DateTime @default(now())
   userId      String //Store the clerk User ID
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  jobId     String   @map("job_id") // Foreign key to the Job table
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  content   String   @default("")
+  createdAt DateTime @default(now()) 
 }

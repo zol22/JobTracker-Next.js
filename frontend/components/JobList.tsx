@@ -1,19 +1,13 @@
 import { useCallback, useState } from "react";
 import { Job } from "../types";
 import JobModal from "./JobModal";
+import { useJobStore } from "../store/useJobStore";
 
-type JobListProps = {
-  jobs: Job[]; // make it optional to allow a default value
-  onUpdateStatus: (id: number, status: string) => void;
-  onAddComment: (id: number, comment: string) => void;
-  onDelete: (id: number) => void;
-};
-
-const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps) => {
+const JobList = () => {
   
+  const { optimisticJobs, handleDeleteJob } = useJobStore();
   const [selectedJob, setSelectedJob] = useState<Job | null>(null); // Tracks the job being viewed in the modal. It is either a Job object or null when no job is selected.
   const [activeTab, setActiveTab] = useState("All"); // Tracks the currently selected tab for filtering jobs
-
   /* 
     Key Type (string): Specifies that the keys of this object are strings ("All", "Applied", etc.).
     Value Type (string[]): Specifies that the values are arrays of strings (e.g., job statuses like ["Applied", "Viewed"]).
@@ -30,13 +24,15 @@ const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps)
   // Filter jobs based on active tab
   const filteredJobs =
     activeTab === "All"
-      ? jobs
-      : jobs.filter((job) => statusCategories[activeTab]?.includes(job.status));// Why Use ?. (Optional Chaining)?: Ensures that statusCategories[activeTab] exists before calling .includes() to avoid errors.
+      ? optimisticJobs
+      : optimisticJobs.filter((job) => statusCategories[activeTab]?.includes(job.status));// Why Use ?. (Optional Chaining)?: Ensures that statusCategories[activeTab] exists before calling .includes() to avoid errors.
+
+      console.log("Filtered Jobs:", filteredJobs);
 
   const handleCloseModal =  useCallback(() => {
     setSelectedJob(null)
   }, [])
-  
+  console.log( `This is the selected Job ${JSON.stringify(selectedJob)}`)
   return (
     <div className="mt-4 p-6 bg-neutral-100 rounded-lg shadow-md">
       <h2 className="uppercase tracking-wide text-gray-700 text-xl font-bold mb-4">
@@ -81,7 +77,9 @@ const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps)
             <th className="px-4 py-2">Title</th>
             <th className="px-4 py-2">Company</th>
             <th className="px-4 py-2">Status</th>
+            <th className="px-4 py-2">Comments</th>
             <th className="px-4 py-2">Actions</th>
+
           </tr>
         </thead>
         <tbody>
@@ -94,20 +92,34 @@ const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps)
                 <td className="px-4 py-2">{job.title}</td>
                 <td className="px-4 py-2">{job.company}</td>
                 <td className="px-4 py-2">{job.status}</td>
-                <td className="px-4 py-2 flex gap-2">
+                <td className="px-4 py-2">
+                    <ul className="list-disc pl-4 space-y-1">
+                      {job.comments?.length > 0 ? (
+                        job.comments.map((comment, index) => (
+                          <li key={index} className="text-sm text-gray-600">
+                            {comment.content}
+                          </li>
+                        ))
+                      ) : (
+                        <li className="text-sm text-gray-400">No comments</li>
+                      )}
+                    </ul>
+                  </td>
+                  <td className="px-4 py-2 flex gap-2">
                   <button
                     className="text-blue-500 hover:underline"
                     onClick={() => setSelectedJob(job)}
                   >
-                    View Details
+                    View
                   </button>
                   <button
                     className="text-red-500 hover:underline"
-                    onClick={() => onDelete(job.id)}
+                    onClick={() => handleDeleteJob(job.id)}
                   >
-                    Delete
+                    X
                   </button>
                 </td>
+
               </tr>
             ))
           ) : (
@@ -136,11 +148,9 @@ const JobList = ({ jobs, onUpdateStatus, onAddComment, onDelete }: JobListProps)
       {/* Modal */}
       {selectedJob && 
       <JobModal 
-        jobId={selectedJob.id}  // Pass only the job ID
-        jobs={jobs}  // ✅ Pass the full list of jobs
+        jobId={selectedJob.id}  
         onClose={handleCloseModal}
-        onUpdateStatus={onUpdateStatus}
-        onAddComment={onAddComment}
+
       />}
     </div>
   );

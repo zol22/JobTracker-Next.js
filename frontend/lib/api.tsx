@@ -1,4 +1,4 @@
-// lib/api.ts
+// Declared Functions to calls the APIs endpoints with Fetch
 import { Job } from "@/types";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -11,7 +11,7 @@ export async function getJobs() {
    }
   const data = await res.json();
   console.log("✅ API Response:", data); 
-  return data || []; // Return only the JobList Array, not message:{} object
+  return data || []; 
   } catch (error) {
     console.error("❌ Error fetching jobs:", error);
     return [];
@@ -53,7 +53,24 @@ export async function addComment(id: number, comment: string) {
     const res = await fetch(`${API_URL}/api/jobs/${id}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ comment }),
+        body: JSON.stringify({ content: comment }),
       });
       return await res.json();
+}
+
+export async function getComments(id: number) {
+    try {
+      const res = await fetch(`${API_URL}/api/jobs/${id}/comments`);
+      if (!res.ok) {
+        console.error("❌ API request failed:", res.status, res.statusText);
+        return [];
+     }
+     const data = await res.json();
+     console.log("✅ API Response:", data); 
+     return data || []; 
+    } catch (error) {
+      console.error("❌ Error fetching comments:", error);
+      return [];
+      
+    }
 }
