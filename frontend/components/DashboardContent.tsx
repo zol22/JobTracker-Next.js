@@ -11,18 +11,17 @@ type DashboardContentProps = {
 };
 
 // Displays the corresponding content based on the selectedTab which was set in SideBack when user clicks it
-const DashboardContent = ({ selectedTab }: DashboardContentProps) => {
-    const { handleAddJob } = useJobStore();
-
-  return (
-    <div className="shadow-lg rounded-lg">
-      {selectedTab === "AllJobs" && <JobList />}
-      {selectedTab === "AddJob" && <AddJobForm onAdd={handleAddJob} />}
-      {selectedTab === "Stats" && <Stats />}
-      {selectedTab === "Affirmation" && <Affirmation />}
-      {selectedTab === "Reminders" && <Reminders />}
-    </div>
-  );
+const DashboardContent = () => {
+    const { selectedTab } = useJobStore();
+   
+      switch (selectedTab) {
+      case 'AllJobs': return <JobList />;
+      case 'AddJob': return <AddJobForm  />;
+      case 'Stats': return <Stats />;
+      case 'Affirmation': return <Affirmation />;
+      case 'Reminders': return <Reminders />;
+      default: return <JobList />; // Fallback to JobList if no match
+      }
 };
 
 export default DashboardContent;

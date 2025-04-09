@@ -22,14 +22,14 @@ export default function Dashboard() {
       <div className="flex flex-col lg:flex-row gap-3">
         {/* Left Section */}
         <div className="w-full lg:w-1/5  rounded-lg">
-         <SideBar setSelectedTab={setSelectedTab} selectedTab={selectedTab} />
+         <SideBar />
         </div>
 
         {/* Right Section changes based of SideBar Selection */}
         <div className="w-full p-4 rounded-lg">
           {loading ? (
             <p className="text-center"> Loading jobs... </p>
-          ): <DashboardContent selectedTab={selectedTab}/>
+          ): <DashboardContent />
  }
         </div>
       </div>

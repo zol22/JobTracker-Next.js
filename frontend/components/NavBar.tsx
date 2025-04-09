@@ -4,9 +4,11 @@ import { useState } from "react";
 import { NavBarProps } from "@/types";
 import { menuItems } from "./menuItems";
 import React from "react";
+import { useJobStore } from "@/store/useJobStore";
 
-const Navbar = ({ setSelectedTab} : NavBarProps) => {
+const Navbar = () => {
   const { user } = useUser();
+  const { selectedTab, setSelectedTab} =  useJobStore();
   const [isOpen, setIsOpen] = useState(false);
 
 
@@ -36,7 +38,7 @@ const Navbar = ({ setSelectedTab} : NavBarProps) => {
                   key={item.id}
                   className="flex items-center gap-2 cursor-pointer p-2 rounded-md text-neutral-800  hover:bg-gray-200"
                   onClick={() => {
-                    setSelectedTab(item.id);
+                    setSelectedTab(item.id); // Zustand Updates
                     setIsOpen(false);
                   }}
                 >

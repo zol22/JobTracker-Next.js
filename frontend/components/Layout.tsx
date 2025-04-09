@@ -13,10 +13,8 @@ type LayoutProps = {
   description?: string;
 };
 
-export default function Layout({ children, title, description }: LayoutProps) {
+export default function Layout({ children, title, description}: LayoutProps) {
   const { isSignedIn } = useAuth(); // Check if the user is signed in
-  const [selectedTab, setSelectedTab] = useState("AllJobs"); // Default page
-
 
   return (
     <>
@@ -35,7 +33,7 @@ export default function Layout({ children, title, description }: LayoutProps) {
 
       <main>
         {/* Show Navbar if the user is signed in */}
-        {isSignedIn && <NavBar setSelectedTab={setSelectedTab} />}
+        {isSignedIn && <NavBar />}
         {children}
       </main>
 

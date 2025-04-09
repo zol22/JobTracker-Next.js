@@ -3,23 +3,22 @@ import { BsFilePerson } from "react-icons/bs";
 import { MdAddHomeWork } from "react-icons/md";
 import { BiDetail } from "react-icons/bi";
 import { GrStatusInfo } from "react-icons/gr";
+import { useJobStore } from '@/store/useJobStore';
 
 
-type AddJobFormProps = {
-  onAdd: (jobData: { title: string; company: string; description: string; status?: string }) => void;
-};
-
-const AddJobForm = ({ onAdd }: AddJobFormProps) => { 
+const AddJobForm = () => { 
   const [title, setTitle] = useState('');
   const [company, setCompany] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('');
   const [successMessage, setSuccessMessage] = useState("");
+  const { handleAddJob, selectedTab } = useJobStore();
+
 
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    onAdd({ title, company, description, status: 'Applied' });
+    handleAddJob({ title, company, description, status: 'Applied' });
     setSuccessMessage(`✅ Job "${title}" at ${company} added successfully! Go to 'All Jobs' Tab to see it :)`);
     setTitle('');
     setCompany('');

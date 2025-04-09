@@ -7,6 +7,8 @@ type JobState = {
     jobs: Job[];    
     optimisticJobs: Job[];
     loading: boolean,
+    selectedTab:string;
+    setSelectedTab: (tab:string) => void;
     fetchJobs: () => Promise<void>;
     handleAddJob: (jobData: Partial<Job>) => Promise<void>;
     handleDeleteJob: (id: number) => Promise<void>;
@@ -20,6 +22,8 @@ type JobState = {
     jobs: [],
     optimisticJobs: [],
     loading: true,
+    selectedTab: "AllJobs",
+    setSelectedTab: (tab) => set({ selectedTab: tab }),
     fetchJobs: async () => {
       set({ loading: true });
       try {

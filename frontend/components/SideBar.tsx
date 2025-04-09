@@ -1,9 +1,12 @@
 import React from 'react'
 import { SidebarProps } from '@/types'
 import { menuItems } from './menuItems'
+import { useJobStore } from '@/store/useJobStore';
 
 // Set the selectedTab  to the corresponding tab when clicking it and it adds a custom className
-const SideBar = ( {setSelectedTab, selectedTab}: SidebarProps) => {
+const SideBar = () => {
+
+  const { selectedTab, setSelectedTab} =  useJobStore();
 
   return (
     <div>
