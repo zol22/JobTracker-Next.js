@@ -64,9 +64,7 @@ export const updateJob = async (req: NextApiRequest, res:NextApiResponse) => {
     }
 }
 
-export const deleteJob = async (req: NextApiRequest, res:NextApiResponse) => {
-    const { id } = req.query;
-    jobsList.filter((job) => job.id !== parseInt(id as string));
-    return res.status(204).send('Job was successfully deleted');
+export const deleteJob = async (id : string) => {
+    return await prisma.job.delete({ where: { id } });
 
 }

@@ -14,9 +14,14 @@ const Navbar = () => {
 
   return (
     <nav className="flex justify-between items-center p-4 bg-gray-800 text-white relative">
-      <h1 className="text-xl">Welcome, {user?.username} 👋</h1>
-        {/* ✅ Logout Button (inside dropdown) */}
-        
+      <h1 className="text-xl cursor-pointer hover:undeline" onClick={()=> {
+        setSelectedTab("AllJobs");
+        setIsOpen(false);
+      }}>
+          Welcome, {user?.username} 👋  
+      </h1>
+
+        {/* ✅ Logout Button (inside dropdown) */}  
         <div className="hidden lg:block">
             <LogoutButton />
           
