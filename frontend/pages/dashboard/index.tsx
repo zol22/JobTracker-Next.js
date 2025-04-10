@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import SideBar from "@/components/SideBar";
 import DashboardContent from "@/components/DashboardContent";
 import { useJobStore } from "@/store/useJobStore";
+import Spinner from "@/components/Spinner";
 
 export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState("AllJobs"); // Default page
@@ -14,6 +15,12 @@ export default function Dashboard() {
     fetchJobs();
   },[fetchJobs])
 
+    // Show a full-screen spinner while loading
+    if (loading) {
+      return (
+          <Spinner />
+      );
+    }
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
@@ -27,10 +34,7 @@ export default function Dashboard() {
 
         {/* Right Section changes based of SideBar Selection */}
         <div className="w-full p-4 rounded-lg">
-          {loading ? (
-            <p className="text-center"> Loading jobs... </p>
-          ): <DashboardContent />
- }
+         <DashboardContent />
         </div>
       </div>
     </div>
