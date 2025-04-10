@@ -22,20 +22,23 @@ const Hero: React.FC = () => {
                 <h1 className="text-4xl md:text-6xl md:leading-tight font-bold text-foreground max-w-lg md:max-w-2xl mx-auto">{heroDetails.heading}</h1>
                 <p className="mt-4 text-foreground max-w-lg mx-auto">{heroDetails.subheading}</p>
                 <div className="mt-6 flex flex-col sm:flex-row items-center sm:gap-4 w-fit mx-auto">
-                </div>
-                <Image
-                    src={heroDetails.centerImageSrc}
-                    width={384}
-                    height={340}
-                    quality={70}
-                    sizes="(max-width: 768px) 100vw, 384px"
-                    alt="Laptop Landing Page Picture"
-                    loading="lazy"
-                    className='relative mt-12 md:mt-16 mx-auto z-10'
-                />
+          
+            </div>
+
+            {/* Responsive Loom Video Embed */}
+            <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-l mb-8">
+            <iframe
+                src="https://www.loom.com/embed/a50d59be802b4c2dbc059c656db8fa06?sid=5f4e6c35-1906-4c04-9b79-61a38a6c736b"
+                allow="fullscreen"
+                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                title="Job Tracker Demo"
+            ></iframe>
+            </div>
             </div>
         </section>
     );
 };
 
 export default Hero;
+
+

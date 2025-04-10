@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.12.1",
     "@headlessui/react": "^2.2.1",
+    "@loomhq/record-sdk": "^3.14.1",
     "@prisma/client": "^6.5.0",
     "autoprefixer": "^10.4.20",
     "lucide-react": "^0.479.0",
