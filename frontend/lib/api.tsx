@@ -40,6 +40,23 @@ export async function deleteJob(id: number) {
     fetch(`${API_URL}/api/jobs/${id}`, { method: 'DELETE' });
 }
 
+
+export async function getJobStats() {
+  try {
+    const res = await fetch(`${API_URL}/api/jobs/stats`);
+    if (!res.ok) {
+      console.error("❌ API request failed:", res.status, res.statusText);
+      return [];
+   }
+  const data = await res.json();
+  console.log("✅ API Response:", data); 
+  return data || []; 
+  } catch (error) {
+    console.error("❌ Error fetching jobs:", error);
+    return [];
+  }
+}
+
 export async function updateStatus(id: number, status: string){
     const res = await fetch(`${API_URL}/api/jobs/${id}/status`, {
         method: 'PUT',

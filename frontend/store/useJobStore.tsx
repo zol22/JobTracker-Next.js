@@ -1,7 +1,7 @@
 /* Calls function from /lib/api.tsx to Fetch */
 import { create } from 'zustand'
-import { Job, Affirmation} from '@/types'
-import { addComment, getComments, deleteJob, getJobs, postJob, updateStatus } from "@/lib/api";
+import { Job, JobStats, Affirmation} from '@/types'
+import { addComment, getComments, deleteJob, getJobs, getJobStats, postJob, updateStatus } from "@/lib/api";
 import { getAffirmation, postAffirmation, updateAffirmation, deleteAffirmation } from "../lib/affirmationandreminders"
 
 type JobState = {
@@ -21,6 +21,8 @@ type JobState = {
     handleAddAffirmation: (affirmationData: Partial<Affirmation>) => Promise<void>;
     handleUpdateAffirmation: (id: string, content: string) => Promise<void>;
     handleDeleteAffirmation: (id: string) => Promise<void>;
+    jobStats: JobStats[],
+    fetchJobStats: () => Promise<void>;
   };
 
 
@@ -194,6 +196,15 @@ type JobState = {
         }));
       } catch (error) {
         console.error("Failed to delete affirmation:", error);
+      }
+    },
+    jobStats: [],
+    fetchJobStats: async () => {
+      try {
+        const stats = await getJobStats();
+        set({ jobStats: stats });
+      } catch (error) {
+        console.log("Failed to fetch job stats:", error);
       }
     }
     

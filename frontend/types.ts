@@ -10,6 +10,11 @@ export interface Job {
     userId: string;
   }
 
+  export interface JobStats {
+    status: string;
+    createdAt: string;
+  }
+
   export interface Comment {
     id?: string;
     content: string;

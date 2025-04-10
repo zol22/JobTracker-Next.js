@@ -51,9 +51,12 @@ export const deleteJob = async (id : string) => {
 
 }
 
-
-/* Here is missing!!
-export const updateJob = async (req: NextApiRequest, res:NextApiResponse) => {
-  console.log("Update Job Request Body");
+export const getJobStats = async (userId:string) => {
+  return await prisma.job.findMany({
+    where: { userId },
+    select: {
+      status: true,
+      createdAt: true
+    }
+  });
 }
-*/
