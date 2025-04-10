@@ -1,4 +1,6 @@
-// This is Server, Routes
+// This file is responsible for handling API requests related to jobs.
+// From here, UserId is obtained from the request using Clerk's authentication.
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { listJobs, postAjob } from "@/controllers/jobs.controller";

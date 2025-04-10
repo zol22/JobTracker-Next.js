@@ -16,6 +16,21 @@ export interface Job {
     createdAt?: string;
 
   }
+
+export interface Affirmation {
+    id: string;
+    content: string;
+    userId: string;
+    createdAt: string;
+}
+
+export interface Reminder {
+    id: string;
+    content: string;
+    userId: string;
+    createdAt: string;
+}
+
   export interface ITestimonial {
     name: string;
     role: string;
@@ -62,3 +77,4 @@ export interface IBenefitBullet {
   description: string;
   icon: React.JSX.Element;
 }
+

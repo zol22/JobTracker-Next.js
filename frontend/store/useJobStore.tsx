@@ -1,7 +1,8 @@
 /* Calls function from /lib/api.tsx to Fetch */
 import { create } from 'zustand'
-import { Job } from '@/types'
+import { Job, Affirmation} from '@/types'
 import { addComment, getComments, deleteJob, getJobs, postJob, updateStatus } from "@/lib/api";
+import { getAffirmation, postAffirmation, updateAffirmation, deleteAffirmation } from "../lib/affirmationandreminders"
 
 type JobState = {
     jobs: Job[];    
@@ -15,6 +16,11 @@ type JobState = {
     handleUpdateStatus: (id: number, newStatus: string) => Promise<void>;
     fetchComments: (id: number) => Promise<void>;
     handleAddComment: (id: number, comment: string) => Promise<void>;
+    affirmations: Affirmation[];
+    fetchAffirmations: () => Promise<void>;
+    handleAddAffirmation: (affirmationData: Partial<Affirmation>) => Promise<void>;
+    handleUpdateAffirmation: (id: string, content: string) => Promise<void>;
+    handleDeleteAffirmation: (id: string) => Promise<void>;
   };
 
 
@@ -136,6 +142,58 @@ type JobState = {
         });
       } catch (err) {
         console.error("❌ Failed to add comment:", err);
+      }
+    },
+    affirmations: [],
+    fetchAffirmations: async () => {  
+      try {
+        const affirmations = await getAffirmation();
+        set((state) => ({
+          affirmations: [...state.affirmations, ...affirmations],
+        }));
+        
+        console.log("Affirmations fetched successfully:", affirmations);
+      } catch (error) {
+        console.error("Failed to fetch affirmations:", error);
+        
+      }
+    },
+    handleAddAffirmation: async (affirmationData) => {
+      try {
+        console.log( `This is the affirmation passed it as parameter, ${JSON.stringify(affirmationData)}`)
+
+        const newAffirmation = await postAffirmation(affirmationData);
+        console.log( `This is the affirmation returned from database, ${JSON.stringify(affirmationData)}`)
+
+        set((state) => ({
+          affirmations: [...state.affirmations, newAffirmation],
+        }));
+      } catch (error) {
+        console.error("Failed to add affirmation:", error);
+      }
+    },
+    handleUpdateAffirmation: async (id, content) => {
+      try {
+        const updatedAffirmation = await updateAffirmation(id, content);
+        set((state) => ({
+          affirmations: state.affirmations.map((affirmation) =>
+            affirmation.id === id ? updatedAffirmation : affirmation
+          ),
+        }));
+      } catch (error) {
+        console.error("Failed to update affirmation:", error);
+      }     
+    },
+    handleDeleteAffirmation: async (id) => {
+      try {
+        await deleteAffirmation(id);
+        set((state) => ({
+          affirmations: state.affirmations.filter(
+            (affirmation) => affirmation.id !== id
+          ),
+        }));
+      } catch (error) {
+        console.error("Failed to delete affirmation:", error);
       }
     }
     

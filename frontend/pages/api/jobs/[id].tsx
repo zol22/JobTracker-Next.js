@@ -1,6 +1,6 @@
 // pages/api/jobs/[id].tsx
 import type { NextApiRequest, NextApiResponse } from "next";
-import { deleteJob, updateJob, findJob } from "@/controllers/jobs.controller";
+import { deleteJob, findJob } from "@/controllers/jobs.controller";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse ) {
@@ -11,8 +11,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse 
         }
 
     if (req.method == 'PUT'){
-      return updateJob(req,res)
+      console.log("Update Job Request Body");
       
+
     } else if (req.method == 'DELETE') {
          try {
           // Ensure the job exists before deleting
@@ -25,8 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse 
          } catch (error) {
           
          }
-
-
 
     } else {
       res.setHeader('Allow', ['PUT', 'DELETE']);

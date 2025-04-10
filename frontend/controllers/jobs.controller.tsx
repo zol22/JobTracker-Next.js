@@ -1,9 +1,6 @@
 // This is Client Component, deal with Database using Prisma
 // These Functions are called from /pages/api/jobs/ ....
-import type { NextApiRequest, NextApiResponse } from "next";
-import { Job } from "@/types";
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
 
 
@@ -49,22 +46,14 @@ export const updateStatus = async (id: string, status:string) => {
     });
 }
 
-
-/*Here is missing!! */
-export const updateJob = async (req: NextApiRequest, res:NextApiResponse) => {
-    const { id } = req.query;
-    const updatedJob = req.body;
-    const jobIndex = jobsList.findIndex((job) => job.id === parseInt(id as string));
-
-    if (jobIndex !== -1) {
-        jobsList[jobIndex] = { ...jobsList[jobIndex], ...updatedJob };
-        return res.json(jobsList[jobIndex]);
-    } else {
-        return res.status(404).send('Job not found');
-    }
-}
-
 export const deleteJob = async (id : string) => {
     return await prisma.job.delete({ where: { id } });
 
 }
+
+
+/* Here is missing!!
+export const updateJob = async (req: NextApiRequest, res:NextApiResponse) => {
+  console.log("Update Job Request Body");
+}
+*/

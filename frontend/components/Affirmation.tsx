@@ -1,14 +1,47 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useJobStore } from "@/store/useJobStore"; // Custom hook to manage job state
+import { useUser } from "@clerk/nextjs"
+import { Textarea } from "@headlessui/react";
 const Affirmation = () => {
-  const [affirmation, setAffirmation] = useState<string>(""); //Tracks the text entered in the input field.
-  const [savedAffirmation, setSavedAffirmation] = useState<string | null>(null); // Stores the saved affirmation for the day. It determines whether the input or the saved text is displayed.
+  const { user } = useUser()
+  const { affirmations,fetchAffirmations, handleAddAffirmation, handleUpdateAffirmation, handleDeleteAffirmation } = useJobStore(); // Fetches the affirmation from the API.
 
-  const handleSaveAffirmation = () => {
-    if (affirmation.trim() !== "") {
-      setSavedAffirmation(affirmation);
-      setAffirmation(""); // Clear the input after saving
+  const [newAffirmation , setNewAffirmation] = useState("");
+  const [ editingId, setEditingId] = useState<string | null>(null);
+  const [ editContent, setEditContent] = useState("");
+
+
+  // Fetch affirmations when the component mounts or when the user changes
+  useEffect(() => {
+    if (user?.id) {
+      fetchAffirmations()
     }
+  }, [user, fetchAffirmations]);
+
+
+  // Function to handle the affirmation submission
+  const handleSaveAffirmation = async() => {
+    if (!newAffirmation.trim()) {
+      return; // Prevent saving empty affirmations
+    }
+    await handleAddAffirmation({ content: newAffirmation });
+    setNewAffirmation(""); // Clear the input field after saving  
+    setEditingId(null); 
+    setEditContent(""); 
+    
+  };
+
+  const handleUpdate = async (id: string) => {
+    if (!editContent.trim()) {
+      return; // Prevent saving empty affirmations
+    }
+    await handleUpdateAffirmation(id, editContent);
+    setEditingId(null); 
+    setEditContent(""); 
+  }
+
+  const handleDelete = async (id: string) => {
+    await handleDeleteAffirmation(id);
   };
 
   return (
@@ -18,57 +51,80 @@ const Affirmation = () => {
           Today&apos;s Affirmation
         </h1>
 
-        {savedAffirmation ? (
-          // Display saved affirmation
-          <div className="mb-4">
-            <p className="text-sm text-neutral-700 italic">
-              {savedAffirmation}
-            </p>
-            <button
-              onClick={() => setSavedAffirmation(null)}
-              className="mt-2 text-neutral-500 hover:underline text-sm"
-            >
-              Edit Affirmation
-            </button>
-          </div>
-        ) : (
-          // Input for adding affirmation
-          <div>
-            <textarea
-              placeholder="Write your affirmation for today..."
-              value={affirmation}
-              onChange={(e) => setAffirmation(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-3 text-sm text-neutral-700 focus:ring-2 focus:ring-neutral-500 focus:outline-none resize-none"
-              rows={4}
-            />
-          </div>
-        )}
-               <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600 border-gray-200">           
-                <button onClick={handleSaveAffirmation} type="submit" className="bg-neutral-800 text-white rounded-lg mt-4 hover:bg-neutral-700 inline-flex items-center py-2.5 px-4 text-xs font-medium text-center focus:ring-4 focus:ring-indigo-300 dark:focus:bg-indigo-500 ">
+      {/* Add Affirmation */}
+      <div>
+        <Textarea
+          placeholder="Write your affirmation for today..."
+          value={newAffirmation}
+          onChange={(e) => setNewAffirmation(e.target.value)}
+          className="w-full border border-neutral-300 rounded-lg p-3 text-sm text-neutral-700 focus:ring-2 focus:ring-neutral-500 focus:outline-none resize-none"
+          rows={4}
+        />
+        <button 
+          onClick={handleSaveAffirmation}
+          className="bg-neutral-800 text-white rounded-lg my-4 hover:bg-neutral-700 inline-flex items-center py-2.5 px-4 text-xs font-medium text-center focus:ring-4 focus:ring-indigo-300 dark:focus:bg-indigo-500 "
+        >
+          Add Affirmation
+        </button>
+      </div>
 
-                Post comment
-              </button>
-           <div className="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
-               <button type="button" className="inline-flex justify-center items-center p-2 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                   <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 20">
-                        <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M1 6v8a5 5 0 1 0 10 0V4.5a3.5 3.5 0 1 0-7 0V13a2 2 0 0 0 4 0V6"/>
-                    </svg>
-                   <span className="sr-only">Attach file</span>
-               </button>
-               <button type="button" className="inline-flex justify-center items-center p-2 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                   <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
-                        <path d="M8 0a7.992 7.992 0 0 0-6.583 12.535 1 1 0 0 0 .12.183l.12.146c.112.145.227.285.326.4l5.245 6.374a1 1 0 0 0 1.545-.003l5.092-6.205c.206-.222.4-.455.578-.7l.127-.155a.934.934 0 0 0 .122-.192A8.001 8.001 0 0 0 8 0Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
-                    </svg>
-                   <span className="sr-only">Set location</span>
-               </button>
-               <button type="button" className="inline-flex justify-center items-center p-2 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                   <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                        <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
-                    </svg>
-                   <span className="sr-only">Upload image</span>
-               </button>
-           </div>
-       </div>
+      {/* List Affirmations */}
+      <ul className="space-y-4">
+        { affirmations.map((affirmation) => (
+          <li key={affirmation.id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
+            {  editingId === affirmation.id ? (
+              <>
+                <Textarea
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  className="w-full border border-neutral-300 rounded-lg p-3 text-sm text-neutral-700 focus:ring-2 focus:ring-neutral-500 focus:outline-none resize-none"
+                  rows={4}
+                />
+                <div className="flex gap-4 mt-2 ml-2 text-sm">
+                  <button
+                    onClick={() => handleUpdate(affirmation.id)}
+                    className="text-blue-600 font-medium hover:underline"
+                  >
+                      Save
+                  </button>
+                  <button 
+                    className="text-red-600 font-medium hover:underline"
+                    onClick={() => {
+                      setEditingId(null);
+                      setEditContent("");
+
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            ): (
+              <>
+                <p className="text-sm text-neutral-800 italic">{affirmation.content}</p>
+                <div className="flex gap-4 mt-2 text-sm">
+                  <button
+                    onClick={() => {
+                      setEditingId(affirmation.id);
+                      setEditContent(affirmation.content);
+                    }}
+                    className="text-blue-600 font-medium hover:underline"
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(affirmation.id)}
+                    className="text-red-600 font-medium hover:underline"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
+          </li>
+        ))}
+
+      </ul>
       </div>
   );
 };
