@@ -31,12 +31,12 @@ import {
           icon: <FiCheckCircle size={26} />,
         },
         {
-          title: "Custom Comments & Reminders",
-          description: "Leave notes and set personal reminders to follow up.",
+          title: "Custom Comments",
+          description: "Leave notes to follow up.",
           icon: <FiMessageSquare size={26} />,
         },
       ],
-      imageSrc: "/images/mockup-1.webp",
+      imageSrc: "/images/3.webp",
     },
     {
       title: "Boost Productivity & Motivation",
@@ -59,7 +59,7 @@ import {
           icon: <FiClock size={26} />,
         },
       ],
-      imageSrc: "/images/mockup-2.webp",
+      imageSrc: "/images/2.webp",
     },
     {
       title: "Secure & Personalized Experience",
@@ -82,7 +82,7 @@ import {
           icon: <FiTarget size={26} />,
         },
       ],
-      imageSrc: "/images/mockup-1.webp",
+      imageSrc: "/images/1.webp",
     },
   ];
   
