@@ -11,7 +11,7 @@ function AppContent({ Component, pageProps }: AppProps) {
   // Show spinner while auth state is loading
   if (!isLoaded) return <Spinner />;
 
-  // Use the appropriate layout based on the auth state
+  // Use the appropriate layout based on the auth state!
   const Layout = isSignedIn ? AuthenticatedLayout : UnauthenticatedLayout;
 
   return (
