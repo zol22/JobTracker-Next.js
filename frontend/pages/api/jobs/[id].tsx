@@ -19,11 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse 
           // Ensure the job exists before deleting
           const job = await findJob(id as string);
           if (!job) {
-            return res.status(404).json({ error: "Job not found" });
+            return res.status(404).json({ message: "Job not found" });
           }
           return deleteJob(id as string);
 
-         } catch (error) {
+         } catch {
+          return res.status(500).json({ message: "Failed to delete job" });
           
          }
 

@@ -22,9 +22,8 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse){
             const jobWithAnewComment =  await addAComment(id as string, content as string)
             return res.status(201).json(jobWithAnewComment);
         
-        } catch (error) {
-            console.log("Failed to add comment:", error)
-            return res.status(500).json({ error: "Internal Server Error" });
+        } catch {
+            return res.status(500).json({ message: "Internal Server Error" });
         }
         
     } else if (req.method == 'GET') {
@@ -34,8 +33,8 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse){
             const jobWithAnewComment = await findJobwithComments(id as string);
             if (!jobWithAnewComment) return res.status(404).json({ error: "Job not found" });
             return res.status(200).json(jobWithAnewComment.comments || []);
-        } catch (error) {
-            return res.status(500).json({ error: "Internal Server Error" });
+        } catch  {
+            return res.status(500).json({ message: "Internal Server Error" });
         }
      
     }   

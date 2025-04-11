@@ -1,14 +1,13 @@
 import { useUser } from "@clerk/nextjs";
 import LogoutButton from "./LogoutButton";
 import { useState } from "react";
-import { NavBarProps } from "@/types";
 import { menuItems } from "./menuItems";
 import React from "react";
 import { useJobStore } from "@/store/useJobStore";
 
 const Navbar = () => {
   const { user } = useUser();
-  const { selectedTab, setSelectedTab} =  useJobStore();
+  const {setSelectedTab} =  useJobStore();
   const [isOpen, setIsOpen] = useState(false);
 
 

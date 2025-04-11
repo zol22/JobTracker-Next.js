@@ -96,7 +96,7 @@ export async function postReminder(reminderData: Partial <Affirmation>) {
 
 export async function deleteReminder(id: string) {
     try {
-        const res = await fetch(`${API_URL}/api/reminders/${id}`, {
+         await fetch(`${API_URL}/api/reminders/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
         });

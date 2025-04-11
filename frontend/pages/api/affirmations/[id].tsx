@@ -19,8 +19,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse 
         try {
             const updatedAffirmation = await updateAffirmation(id as string, content);
             return res.status(200).json(updatedAffirmation);
-        } catch (error) {
-            return res.status(500).json({ error: "Failed to update affirmation" });
+        } catch {
+            return res.status(500).json({ message: "Failed to update affirmation" });
         }
       
 
@@ -33,8 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse 
             }
             return res.status(200).json({ message: "Affirmation deleted successfully" });
     
-            } catch (error) {
-                return res.status(500).json({ error: "Failed to delete affirmation" });
+            } catch {
+                return res.status(500).json({ message: "Failed to delete affirmation" });
             }
 
     } else {

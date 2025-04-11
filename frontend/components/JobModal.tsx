@@ -1,7 +1,6 @@
 // components/JobModal.tsx
 import { useState, useRef, useOptimistic, startTransition, useEffect} from "react";
 import { useJobStore } from "../store/useJobStore";
-import { Job } from "../types";
 
 type JobModalProps = {
   jobId: number; // ✅ Use jobId instead of a static job
@@ -10,7 +9,7 @@ type JobModalProps = {
 
 const JobModal = ({ jobId, onClose }: JobModalProps) => {
   
-  const { fetchComments, handleAddComment, jobs, handleUpdateStatus, optimisticJobs} = useJobStore();
+  const { fetchComments, handleAddComment, handleUpdateStatus, optimisticJobs} = useJobStore();
   const [comment, setComment] = useState("");
   const modalRef = useRef<HTMLDivElement>(null); // Ref for modal container
 
@@ -33,13 +32,13 @@ const JobModal = ({ jobId, onClose }: JobModalProps) => {
         updateOptimisticStatus(job.status);
       });
     }
-  }, [job?.status]); // ✅ Runs when `job` changes  
+  }, [job?.status, updateOptimisticStatus]); // ✅ Runs when `job` changes  
 
   
     // Fetch comments when modal opens
     useEffect(() => { // Fetch comments when modal is opened
       fetchComments(jobId);
-    } , [jobId]); // ✅ Runs when `jobId` changes
+    } , [jobId, fetchComments]); // ✅ Runs when `jobId` changes
 
     // Handle outside clicks to close modal
     useEffect(() => {
@@ -60,7 +59,7 @@ const JobModal = ({ jobId, onClose }: JobModalProps) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
 
-  }, []); // ✅ Runs when `job` changes (or gets deleted)
+  }, [job, onClose]); // ✅ Runs when `job` changes (or gets deleted)
 
   const handleStatusChange =  (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;

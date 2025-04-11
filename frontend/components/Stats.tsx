@@ -23,7 +23,7 @@ const Stats = () => {
 
   useEffect(() => {
     if (user?.id) fetchJobStats();
-  }, [user]);
+  }, [user, fetchJobStats]);
 
   // ======== Pie Chart: Status Distribution ==========
   const statusCounts = jobStats.reduce((acc, job) => {

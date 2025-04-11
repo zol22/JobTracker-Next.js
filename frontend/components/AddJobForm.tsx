@@ -12,7 +12,7 @@ const AddJobForm = () => {
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('');
   const [successMessage, setSuccessMessage] = useState("");
-  const { handleAddJob, selectedTab } = useJobStore();
+  const { handleAddJob } = useJobStore();
 
 
 

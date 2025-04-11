@@ -1,7 +1,6 @@
 //pages/api/jobs/[id]/status.tsx
 import type { NextApiRequest, NextApiResponse } from "next";
 import { updateStatus } from "@/controllers/jobs.controller";
-import { s } from "motion/react-client";
 
 export default async function handler(req: NextApiRequest,res: NextApiResponse){
     const { id } = req.query;

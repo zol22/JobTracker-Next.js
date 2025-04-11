@@ -1,5 +1,4 @@
 import React from 'react'
-import { SidebarProps } from '@/types'
 import { menuItems } from './menuItems'
 import { useJobStore } from '@/store/useJobStore';
 

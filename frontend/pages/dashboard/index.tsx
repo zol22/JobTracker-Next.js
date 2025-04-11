@@ -1,13 +1,11 @@
 /* /pages/dashboard */
-import Navbar from "@/components/NavBar";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import SideBar from "@/components/SideBar";
 import DashboardContent from "@/components/DashboardContent";
 import { useJobStore } from "@/store/useJobStore";
 import Spinner from "@/components/Spinner";
 
 export default function Dashboard() {
-  const [selectedTab, setSelectedTab] = useState("AllJobs"); // Default page
   const { fetchJobs, loading } = useJobStore();
 
   // 🔥 Fetch jobs when user signs in

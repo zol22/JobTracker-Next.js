@@ -6,9 +6,6 @@ import Affirmation from "./Affirmation";
 import Reminders from "./Reminders";
 import { useJobStore } from "@/store/useJobStore";
 
-type DashboardContentProps = {
-  selectedTab: string;
-};
 
 // Displays the corresponding content based on the selectedTab which was set in SideBack when user clicks it
 const DashboardContent = () => {
