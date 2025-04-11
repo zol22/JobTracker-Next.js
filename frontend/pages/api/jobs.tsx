@@ -18,8 +18,15 @@ export default async function handler(req : NextApiRequest, res: NextApiResponse
 
   if (req.method === 'GET') {
     res.setHeader("Cache-Control", "no-store, max-age=0"); // 👈 Prevents caching
-    const jobs = await listJobs(userId);
-    return res.status(200).json(jobs)
+    try {
+        const jobs = await listJobs(userId);
+      return res.status(200).json(jobs)
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      return res.status(500).json({ error: "Failed to fetch jobs" });
+      
+    }
+  
 
   } else if (req.method === 'POST') {
     const { title, company, description, status } = req.body;
